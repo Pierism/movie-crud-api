@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Movie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 24px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .MOV{
+            background: #113d5f;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            
+
+        }
+    </style>
+</head>
+<body>
+    <div class="MOV">
+        <NAV>
+            <h1>MOVIE BOX</h1>
+        </NAV>
+        
+    </div>
+    <div class="container">
+        <h1>Delete a Movie</h1>
+        <form id="deleteForm">
+            <label for="movieId">Enter Movie ID:</label>
+            <input type="text" id="movieId" name="movieId" required>
+            <button type="submit">Delete Movie</button>
+        </form>
+        <div id="message">
+            <!-- Success or error message will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('deleteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const movieId = document.getElementById('movieId').value;
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch(`http://localhost:3000/movies/${movieId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    messageDiv.innerHTML = `<p>Movie with ID ${movieId} has been successfully deleted.</p>`;
+                } else {
+                    throw new Error('Movie not found or could not be deleted');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

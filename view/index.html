@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Movie</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      div{
+        border-radius: 30px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input,
+      textarea,
+      button {
+        margin-bottom: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 25px;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .message {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      input{
+        border-radius: 25px;
+        border: 1px solid black;
+      }
+      textarea{
+        border-radius: 25px;
+        border:1px solid black;
+        border-color: black;
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Add Movie</h2>
+      <form id="movieForm">
+        <input type="text" id="name" placeholder="Movie Name" required />
+        <textarea
+          id="description"
+          placeholder="Description"
+          required
+        ></textarea>
+        <input
+          type="number"
+          id="duration"
+          placeholder="Duration (in minutes)"
+        />
+        <input
+          type="number"
+          id="ratings"
+          placeholder="Ratings (1-5)"
+          min="1"
+          max="5"
+        />
+        <button type="submit">Add Movie</button>
+      </form>
+      <div class="message" id="message"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("movieForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // Prevent the default form submission
+
+          // Get the form data
+          const name = document.getElementById("name").value;
+          const description = document.getElementById("description").value;
+          const duration = document.getElementById("duration").value;
+          const ratings = document.getElementById("ratings").value;
+
+          // Create a movie object
+          const movieData = {
+            name: name,
+            description: description,
+            duration: duration,
+            ratings: ratings,
+          };
+
+          try {
+            const response = await fetch("http://localhost:3000/movies", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(movieData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              document.getElementById("message").innerText =
+                "Movie added successfully!";
+            } else {
+              document.getElementById("message").innerText =
+                "Error: " + result.message;
+            }
+          } catch (error) {
+            document.getElementById("message").innerText =
+              "Failed to add movie: " + error.message;
+          }
+        });
+    </script>
+  </body>
+</html>

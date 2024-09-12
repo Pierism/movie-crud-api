@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 24px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      label {
+        margin-right: 10px;
+      }
+
+      input {
+        padding: 5px;
+        margin-right: 10px;
+      }
+
+      button {
+        padding: 5px 10px;
+      }
+
+      #movieDetails {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Movie Details</h1>
+      <form id="movieForm">
+        <label for="movieId">Enter Movie ID:</label>
+        <input type="text" id="movieId" name="movieId" required />
+        <button type="submit">Get Movie</button>
+      </form>
+      <div id="movieDetails">
+        <!-- Movie details will be displayed here -->
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("movieForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const movieId = document.getElementById("movieId").value;
+          const movieDetailsDiv = document.getElementById("movieDetails");
+
+          try {
+            const response = await fetch(
+              `http://localhost:3000/movies/${movieId}`
+            );
+            if (!response.ok) {
+              throw new Error("Movie not found");
+            }
+            const movie = await response.json();
+            console.log(movie);
+
+            movieDetailsDiv.innerHTML = `
+                    <h2>${movie.name}</h2>
+                    <p><strong>Description:</strong> ${movie.description}</p>
+                    <p><strong>Duration:</strong> ${movie.duration} minutes</p>
+                    <p><strong>Ratings:</strong> ${movie.ratings}</p>
+                `;
+          } catch (error) {
+            movieDetailsDiv.innerHTML = `<p>${error.message}</p>`;
+          }
+        });
+    </script>
+  </body>
+</html>
